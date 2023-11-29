@@ -1,6 +1,23 @@
 package br.com.fiap.gs.domain.entity;
 
-import br.com.fiap.gs.domain.entity.ObjetoGenerico;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-public class ObjetivoSaude extends ObjetoGenerico {
+@Entity
+@Table(name = "TB_OBJETIVO_SAUDE")
+@DiscriminatorValue("OBJETIVO_SAUDE")
+public class ObjetivoSaude extends InformacaoUsuario {
+
+    public ObjetivoSaude() {
+    }
+
+    public ObjetivoSaude(Long id, String nome, String descricao) {
+        super(id, nome, descricao);
+    }
+
+    @Override
+    public String toString() {
+        return "ObjetivoSaude{} " + super.toString();
+    }
 }

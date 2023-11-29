@@ -37,45 +37,28 @@ public class Usuario {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "TB_USUARIO_OBJETIVO",
+            name = "TB_USUARIO_INFORMACAO",
             joinColumns = {
                     @JoinColumn(
                             name = "USUARIO",
                             referencedColumnName = "ID_USUARIO",
-                            foreignKey = @ForeignKey(name = "TB_USUARIO_OBJETIVO_FK_USUARIO")
+                            foreignKey = @ForeignKey(name = "TB_USUARIO_INFORMACAO_FK_USUARIO")
                     )
             },
             inverseJoinColumns = {
                     @JoinColumn(
-                            name = "OBJETIVO_SAUDE",
-                            referencedColumnName = "ID_OBJETIVO_SAUDE",
-                            foreignKey = @ForeignKey(name = "TB_USUARIO_OBJETIVO_FK_OBJETIVO_SAUDE")
+                            name = "USUARIO_INFORMACAO",
+                            referencedColumnName = "ID_INFORMACAO_USUARIO",
+                            foreignKey = @ForeignKey(name = "TB_USUARIO_INFORMACAO_FK_INFORMACAO_USUARIO")
                     )
             }
     )
-    private Set<ObjetivoSaude> objetivoSaudeSet = new LinkedHashSet<>();
+    private Set<InformacaoUsuario> informacoesUsuario = new LinkedHashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "TB_USUARIO_RESTRICAO",
-            joinColumns = {
-                    @JoinColumn(
-                            name = "USUARIO",
-                            referencedColumnName = "ID_USUARIO",
-                            foreignKey = @ForeignKey(name = "TB_USUARIO_SERVICO_FK_USUARIO")
-                    )
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(
-                            name = "RESTRICAO_ALIMENTAR",
-                            referencedColumnName = "ID_RESTRICAO_ALIMENTAR",
-                            foreignKey = @ForeignKey(name = "TB_USUARIO_RESTRICAO_FK_RESTRICAO_ALIMENTAR")
-                    )
-            }
-    )
-    private Set<RestricaoAlimentar> restricaoAlimentarSet = new LinkedHashSet<>();
+    public Usuario() {
+    }
 
-    public Usuario(Long id, String email, String senha, String nome, Integer idade, Double altura, Double peso, Sexo sexo, Set<ObjetivoSaude> objetivoSaudeSet, Set<RestricaoAlimentar> restricaoAlimentarSet) {
+    public Usuario(Long id, String email, String senha, String nome, Integer idade, Double altura, Double peso, Sexo sexo, Set<InformacaoUsuario> informacoesUsuario) {
         this.id = id;
         this.email = email;
         this.senha = senha;
@@ -84,8 +67,7 @@ public class Usuario {
         this.altura = altura;
         this.peso = peso;
         this.sexo = sexo;
-        this.objetivoSaudeSet = objetivoSaudeSet;
-        this.restricaoAlimentarSet = restricaoAlimentarSet;
+        this.informacoesUsuario = informacoesUsuario;
     }
 
     public Long getId() {
@@ -160,21 +142,12 @@ public class Usuario {
         return this;
     }
 
-    public Set<ObjetivoSaude> getObjetivoSaudeSet() {
-        return objetivoSaudeSet;
+    public Set<InformacaoUsuario> getInformacoesUsuario() {
+        return informacoesUsuario;
     }
 
-    public Usuario setObjetivoSaudeSet(Set<ObjetivoSaude> objetivoSaudeSet) {
-        this.objetivoSaudeSet = objetivoSaudeSet;
-        return this;
-    }
-
-    public Set<RestricaoAlimentar> getRestricaoAlimentarSet() {
-        return restricaoAlimentarSet;
-    }
-
-    public Usuario setRestricaoAlimentarSet(Set<RestricaoAlimentar> restricaoAlimentarSet) {
-        this.restricaoAlimentarSet = restricaoAlimentarSet;
+    public Usuario setInformacoesUsuario(Set<InformacaoUsuario> informacoesUsuario) {
+        this.informacoesUsuario = informacoesUsuario;
         return this;
     }
 
@@ -189,8 +162,7 @@ public class Usuario {
                 ", altura=" + altura +
                 ", peso=" + peso +
                 ", sexo=" + sexo +
-                ", objetivoSaudeSet=" + objetivoSaudeSet +
-                ", restricaoAlimentarSet=" + restricaoAlimentarSet +
+                ", informacoesUsuario=" + informacoesUsuario +
                 '}';
     }
 }
