@@ -1,5 +1,6 @@
 package br.com.fiap.gs.domain.entity;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import jakarta.persistence.*;
@@ -37,28 +38,28 @@ public class Usuario {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "TB_USUARIO_INFORMACAO",
+            name = "TB_USUARIO_ACOMPANHAMENTO",
             joinColumns = {
                     @JoinColumn(
                             name = "USUARIO",
                             referencedColumnName = "ID_USUARIO",
-                            foreignKey = @ForeignKey(name = "TB_USUARIO_INFORMACAO_FK_USUARIO")
+                            foreignKey = @ForeignKey(name = "TB_USUARIO_ACOMPANHAMENTO_FK_USUARIO")
                     )
             },
             inverseJoinColumns = {
                     @JoinColumn(
-                            name = "USUARIO_INFORMACAO",
-                            referencedColumnName = "ID_INFORMACAO_USUARIO",
-                            foreignKey = @ForeignKey(name = "TB_USUARIO_INFORMACAO_FK_INFORMACAO_USUARIO")
+                            name = "USUARIO_ACOMPANHAMENTO",
+                            referencedColumnName = "ID_ACOMPANHAMENTO_MEDICO",
+                            foreignKey = @ForeignKey(name = "TB_USUARIO_ACOMPANHAMENTO_FK_ACOMPANHAMENTO_USUARIO")
                     )
             }
     )
-    private Set<InformacaoUsuario> informacoesUsuario = new LinkedHashSet<>();
+    private Set<AcompanhamentoMedico> acompanhamentoUsuario = new LinkedHashSet<>();
 
     public Usuario() {
     }
 
-    public Usuario(Long id, String email, String senha, String nome, Integer idade, Double altura, Double peso, Sexo sexo, Set<InformacaoUsuario> informacoesUsuario) {
+    public Usuario(Long id, String email, String senha, String nome, Integer idade, Double altura, Double peso, Sexo sexo, Set<AcompanhamentoMedico> acompanhamentoUsuario) {
         this.id = id;
         this.email = email;
         this.senha = senha;
@@ -67,7 +68,7 @@ public class Usuario {
         this.altura = altura;
         this.peso = peso;
         this.sexo = sexo;
-        this.informacoesUsuario = informacoesUsuario;
+        this.acompanhamentoUsuario = acompanhamentoUsuario;
     }
 
     public Long getId() {
@@ -142,12 +143,12 @@ public class Usuario {
         return this;
     }
 
-    public Set<InformacaoUsuario> getInformacoesUsuario() {
-        return informacoesUsuario;
+    public Set<AcompanhamentoMedico> getAcompanhamentoUsuario() {
+        return acompanhamentoUsuario;
     }
 
-    public Usuario setInformacoesUsuario(Set<InformacaoUsuario> informacoesUsuario) {
-        this.informacoesUsuario = informacoesUsuario;
+    public Usuario setAcompanhamentoUsuario(Set<AcompanhamentoMedico> acompanhamentoUsuario) {
+        this.acompanhamentoUsuario = acompanhamentoUsuario;
         return this;
     }
 
@@ -162,7 +163,7 @@ public class Usuario {
                 ", altura=" + altura +
                 ", peso=" + peso +
                 ", sexo=" + sexo +
-                ", informacoesUsuario=" + informacoesUsuario +
+                ", acompanhamentoUsuario=" + acompanhamentoUsuario +
                 '}';
     }
 }

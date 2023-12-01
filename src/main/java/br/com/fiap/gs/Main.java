@@ -1,6 +1,7 @@
 package br.com.fiap.gs;
 
 import br.com.fiap.gs.domain.entity.*;
+import br.com.fiap.gs.domain.repository.AcompanhamentoMedicoRepository;
 import br.com.fiap.gs.domain.repository.ObjetivoSaudeRepository;
 import br.com.fiap.gs.domain.repository.RestricaoAlimentarRepository;
 import br.com.fiap.gs.domain.repository.UsuarioRepository;
@@ -8,57 +9,158 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        // EntityManager setup
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("oracle-fiap");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        // Create objects for ObjetivoSaude
-        ObjetivoSaude objetivoSaude1 = new ObjetivoSaude(null, "Objetivo 1", "Descrição do objetivo 1");
-        ObjetivoSaude objetivoSaude2 = new ObjetivoSaude(null, "Objetivo 2", "Descrição do objetivo 2");
-        ObjetivoSaude objetivoSaude3 = new ObjetivoSaude(null, "Objetivo 3", "Descrição do objetivo 3");
-
-        // Create objects for RestricaoAlimentar
-        RestricaoAlimentar restricaoAlimentar1 = new RestricaoAlimentar(null, "Restricao 1", "Descrição da restrição 1", 50);
-        RestricaoAlimentar restricaoAlimentar2 = new RestricaoAlimentar(null, "Restricao 2", "Descrição da restrição 2", 70);
-        RestricaoAlimentar restricaoAlimentar3 = new RestricaoAlimentar(null, "Restricao 3", "Descrição da restrição 3", 80);
-
-        // Create objects for Usuario
-        Set<InformacaoUsuario> informacoesUsuario1 = new HashSet<>();
-        informacoesUsuario1.add(objetivoSaude1);
-        informacoesUsuario1.add(restricaoAlimentar1);
-
-        Set<InformacaoUsuario> informacoesUsuario2 = new HashSet<>();
-        informacoesUsuario2.add(objetivoSaude2);
-        informacoesUsuario2.add(restricaoAlimentar2);
-
-        Set<InformacaoUsuario> informacoesUsuario3 = new HashSet<>();
-        informacoesUsuario3.add(objetivoSaude3);
-        informacoesUsuario3.add(restricaoAlimentar3);
-
-        Usuario usuario1 = new Usuario(null, "email1@example.com", "senha1", "Usuário 1", 30, 170.0, 65.0, Sexo.MASCULINO, informacoesUsuario1);
-        Usuario usuario2 = new Usuario(null, "email2@example.com", "senha2", "Usuário 2", 25, 160.0, 55.0, Sexo.FEMININO, informacoesUsuario2);
-        Usuario usuario3 = new Usuario(null, "email3@example.com", "senha3", "Usuário 3", 35, 175.0, 70.0, Sexo.MASCULINO, informacoesUsuario3);
-
-        // Using repositories to persist the entities
         ObjetivoSaudeRepository objetivoSaudeRepository = ObjetivoSaudeRepository.build(entityManager);
-        objetivoSaudeRepository.persist(objetivoSaude1);
-        objetivoSaudeRepository.persist(objetivoSaude2);
-        objetivoSaudeRepository.persist(objetivoSaude3);
-
         RestricaoAlimentarRepository restricaoAlimentarRepository = RestricaoAlimentarRepository.build(entityManager);
-        restricaoAlimentarRepository.persist(restricaoAlimentar1);
-        restricaoAlimentarRepository.persist(restricaoAlimentar2);
-        restricaoAlimentarRepository.persist(restricaoAlimentar3);
-
+        AcompanhamentoMedicoRepository acompanhamentoMedicoRepository = AcompanhamentoMedicoRepository.build(entityManager);
         UsuarioRepository usuarioRepository = UsuarioRepository.build(entityManager);
-        usuarioRepository.persist(usuario1);
+
+        // Criando ObjetivoSaude
+        ObjetivoSaude objetivo1 = new ObjetivoSaude()
+                .setNome("Emagrecimento")
+                .setDescricao("Perder peso")
+                .setProgresso(50);
+        objetivoSaudeRepository.persist(objetivo1);
+
+        ObjetivoSaude objetivo2 = new ObjetivoSaude()
+                .setNome("Ganho de Massa")
+                .setDescricao("Aumento de massa muscular")
+                .setProgresso(30);
+        objetivoSaudeRepository.persist(objetivo2);
+
+        ObjetivoSaude objetivo3 = new ObjetivoSaude()
+                .setNome("Manutenção")
+                .setDescricao("Manter o peso atual")
+                .setProgresso(80);
+        objetivoSaudeRepository.persist(objetivo3);
+
+        // Criando RestricaoAlimentar
+        RestricaoAlimentar restricao1 = new RestricaoAlimentar()
+                .setNome("Sem glúten")
+                .setDescricao("Restrição alimentar de glúten");
+        restricaoAlimentarRepository.persist(restricao1);
+
+        RestricaoAlimentar restricao2 = new RestricaoAlimentar()
+                .setNome("Sem lactose")
+                .setDescricao("Restrição alimentar de lactose");
+        restricaoAlimentarRepository.persist(restricao2);
+
+        RestricaoAlimentar restricao3 = new RestricaoAlimentar()
+                .setNome("Veganismo")
+                .setDescricao("Restrição alimentar vegana");
+        restricaoAlimentarRepository.persist(restricao3);
+
+        // Criando três AcompanhamentoMedico e associando ObjetivoSaude e RestricaoAlimentar
+        Set<ObjetivoSaude> objt1 = new LinkedHashSet<>();
+        objt1.add(objetivo1);
+        Set<RestricaoAlimentar> rest1 = new LinkedHashSet<>();
+        rest1.add(restricao1);
+        AcompanhamentoMedico acompanhamento1 = new AcompanhamentoMedico()
+                .setDataAcompanhamento(LocalDate.now())
+                .setObjetivoSaude(objt1)
+                .setRestricaoAlimentar(rest1);
+        acompanhamentoMedicoRepository.persist(acompanhamento1);
+
+        Set<ObjetivoSaude> objt2 = new LinkedHashSet<>();
+        objt2.add(objetivo2);
+        Set<RestricaoAlimentar> rest2 = new LinkedHashSet<>();
+        rest2.add(restricao2);
+        AcompanhamentoMedico acompanhamento2 = new AcompanhamentoMedico()
+                .setDataAcompanhamento(LocalDate.now())
+                .setObjetivoSaude(objt2)
+                .setRestricaoAlimentar(rest2);
+        acompanhamentoMedicoRepository.persist(acompanhamento2);
+
+        Set<ObjetivoSaude> objt3 = new LinkedHashSet<>();
+        objt3.add(objetivo3);
+        Set<RestricaoAlimentar> rest3 = new LinkedHashSet<>();
+        rest3.add(restricao3);
+        AcompanhamentoMedico acompanhamento3 = new AcompanhamentoMedico()
+                .setDataAcompanhamento(LocalDate.now())
+                .setObjetivoSaude(objt3)
+                .setRestricaoAlimentar(rest3);
+        acompanhamentoMedicoRepository.persist(acompanhamento3);
+
+        // Criando usuário e associando aos acompanhamentos
+        Set<AcompanhamentoMedico> acompanhamentosUsuario = new HashSet<>();
+        acompanhamentosUsuario.add(acompanhamento1);
+
+        Usuario usuario = new Usuario()
+                .setEmail("usuario@teste.com")
+                .setSenha("123456")
+                .setNome("Usuário Teste")
+                .setIdade(30)
+                .setAltura(1.75)
+                .setPeso(70.0)
+                .setSexo(Sexo.MASCULINO)
+                .setAcompanhamentoUsuario(acompanhamentosUsuario);
+        usuarioRepository.persist(usuario);
+
+        Set<AcompanhamentoMedico> acompanhamentosUsuario2 = new HashSet<>();
+        acompanhamentosUsuario2.add(acompanhamento2);
+
+        Usuario usuario2 = new Usuario()
+                .setEmail("usuario2@teste.com")
+                .setSenha("123456")
+                .setNome("Usuário 2 Teste")
+                .setIdade(25)
+                .setAltura(1.65)
+                .setPeso(60.0)
+                .setSexo(Sexo.FEMININO)
+                .setAcompanhamentoUsuario(acompanhamentosUsuario2);
         usuarioRepository.persist(usuario2);
+
+        Set<AcompanhamentoMedico> acompanhamentosUsuario3 = new HashSet<>();
+        acompanhamentosUsuario3.add(acompanhamento3);
+
+        Usuario usuario3 = new Usuario()
+                .setEmail("usuario3@teste.com")
+                .setSenha("123456")
+                .setNome("Usuário 3 Teste")
+                .setIdade(35)
+                .setAltura(1.80)
+                .setPeso(80.0)
+                .setSexo(Sexo.MASCULINO)
+                .setAcompanhamentoUsuario(acompanhamentosUsuario3);
         usuarioRepository.persist(usuario3);
+
+        // Exemplo de utilização dos métodos da Repository para ObjetivoSaude
+        ObjetivoSaude objetivoEncontrado = objetivoSaudeRepository.findById(objetivo1.getId());
+        objetivoEncontrado.setProgresso(70); // Altera o progresso
+        objetivoSaudeRepository.update(objetivoEncontrado);
+
+        objetivoSaudeRepository.delete(objetivo3); // Deleta o terceiro objetivo
+
+        // Exemplo de utilização dos métodos da Repository para RestricaoAlimentar
+        RestricaoAlimentar restricaoEncontrada = restricaoAlimentarRepository.findById(restricao1.getId());
+        restricaoEncontrada.setDescricao("Nova descrição"); // Altera a descrição
+        restricaoAlimentarRepository.update(restricaoEncontrada);
+
+        restricaoAlimentarRepository.delete(restricao2); // Deleta a segunda restrição
+
+        // Exemplo de utilização dos métodos da Repository para AcompanhamentoMedico
+        AcompanhamentoMedico acompanhamentoEncontrado = acompanhamentoMedicoRepository.findById(acompanhamento1.getId());
+        acompanhamentoEncontrado.setDataAcompanhamento(LocalDate.now().minusDays(2)); // Altera a data
+        acompanhamentoMedicoRepository.update(acompanhamentoEncontrado);
+
+        acompanhamentoMedicoRepository.delete(acompanhamento3); // Deleta o terceiro acompanhamento
+
+        // Exemplo de utilização dos métodos da Repository para Usuario
+        Usuario usuarioEncontrado = usuarioRepository.findById(usuario.getId());
+        usuarioEncontrado.setNome("Novo Nome"); // Altera o nome
+        usuarioRepository.update(usuarioEncontrado);
+
+        usuarioRepository.delete(usuario3); // Deleta o terceiro usuário
 
         entityManager.close();
         entityManagerFactory.close();
