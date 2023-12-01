@@ -68,6 +68,17 @@ Diagrama do banco de dados.
 ![Captura de tela 2023-12-01 124802.png](..%2F..%2F..%2F..%2FPictures%2FScreenshots%2FCaptura%20de%20tela%202023-12-01%20124802.png)
 
 ---
+
+# INSTALAÇÕES:
+Java: 17
+
+Maven: 4.0.0
+
+JDK: 18
+
+
+----
+
 # COMO RODAR
 
 Clonar o projeto:
